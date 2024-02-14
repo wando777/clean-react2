@@ -3,11 +3,12 @@
     {
       "extends": "standard-with-typescript",
       "parserOptions": {
-        "project": "./tsconfig.json"
+        "project": ["./tsconfig.json"]
       },
       "env": {
         "node": true
       },
+      "excludedFiles": ["jest.config.js"],
       "plugins": ["@typescript-eslint"],
       "files": ["*.js", "*.jsx ", "*.ts", "*.tsx"],
       "rules": {
