@@ -1,0 +1,18 @@
+{
+  "overrides": [
+    {
+      "extends": "standard-with-typescript",
+      "parserOptions": {
+        "project": "./tsconfig.json"
+      },
+      "env": {
+        "node": true
+      },
+      "plugins": ["@typescript-eslint"],
+      "files": ["*.js", "*.jsx ", "*.ts", "*.tsx"],
+      "rules": {
+        "@typescript-eslint/space-before-function-paren": "off"
+      }
+    }
+  ]
+}
