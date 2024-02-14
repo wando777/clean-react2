@@ -1,18 +1,43 @@
+// {
+//   "settings": {
+//     "react": {
+//       "version": "detect"
+//     }
+//   },
+//   "extends": ["standard-with-typescript", "plugin:react/recommended"],
+//   "plugins": ["react"],
+//   "parserOptions": {
+//     "project": "./tsconfig.json"
+//   },
+//   "excludedFiles": ["jest.config.js"],
+//   "rules": {
+//     "@typescript-eslint/consistent-type-definitions": "off",
+//     "@typescript-eslint/strict-boolean-expressions": "off",
+//     "react/jsx-uses-vards": "error",
+//     "@typescript-eslint/space-before-function-paren": "off"
+//   }
+// }
+
 {
   "overrides": [
     {
-      "extends": "standard-with-typescript",
+      "files": ["*.js", "*.jsx", "*.ts", "*.tsx"],
+      "settings": {
+        "react": {
+          "version": "detect"
+        }
+      },
+      "extends": ["standard-with-typescript", "plugin:react/recommended"],
+      "plugins": ["react"],
       "parserOptions": {
         "project": ["./tsconfig.json"]
       },
-      "env": {
-        "node": true
-      },
       "excludedFiles": ["jest.config.js"],
-      "plugins": ["@typescript-eslint"],
-      "files": ["*.js", "*.jsx ", "*.ts", "*.tsx"],
       "rules": {
-        "@typescript-eslint/space-before-function-paren": "off"
+        "@typescript-eslint/consistent-type-definitions": "off",
+        "@typescript-eslint/no-namespace": "off",
+        "@typescript-eslint/space-before-function-paren": "off",
+        "@typescript-eslint/brace-style": "off"
       }
     }
   ]
