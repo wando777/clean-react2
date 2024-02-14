@@ -1,13 +1,27 @@
 {
   "compilerOptions": {
     "target": "ES2022" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
     "module": "commonjs" /* Specify what module code is generated. */,
+    "moduleResolution": "node" /* Specify how TypeScript looks up a file from a given module specifier. */,
+    "jsx": "react" /* Specify what JSX code is generated. */,
     "rootDir": "src" /* Specify the root folder within your source files. */,
     "sourceMap": true /* Create source map files for emitted JavaScript files. */,
     "outDir": "dist" /* Specify an output folder for all emitted files. */,
-    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
+    "baseUrl": "src" /* Specify the base directory to resolve non-relative module names. */,
     "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
     "strict": true /* Enable all strict type-checking options. */,
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */
-  }
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    // "noEmit": true,
+    "paths": {
+      "@/*": ["*"],
+      "@/tests/*": ["../tests/*"]
+    }
+  },
+  "include": ["src"]
 }
