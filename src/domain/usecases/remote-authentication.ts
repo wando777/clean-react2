@@ -1,6 +1,11 @@
-import { type HttpClient } from '@/infra/gateways/protocols'
+import {
+  type HttpResponse,
+  type HttpClient,
+  HttpStatusCode
+} from '@/data/protocols/http'
 import { type AccountModel } from '../models'
 import { type Authentication } from './protocols'
+import { InvalidCredentialsError } from '../errors'
 
 export class RemoteAuthentication implements Authentication {
   constructor(
@@ -9,7 +14,14 @@ export class RemoteAuthentication implements Authentication {
   ) {}
 
   async auth(params: Authentication.Input): Promise<AccountModel> {
-    await this.httpClient.post({ url: this.url, data: params })
-    return await Promise.resolve({ accessToken: 'any_token' })
+    const res: HttpResponse<AccountModel> = await this.httpClient.post({
+      url: this.url,
+      data: params
+    })
+    console.log(res)
+    if (res.statusCode === HttpStatusCode.unauthorized) {
+      throw new InvalidCredentialsError()
+    }
+    return await Promise.resolve(res.body ?? { accessToken: '' })
   }
 }

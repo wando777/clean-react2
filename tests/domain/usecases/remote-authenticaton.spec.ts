@@ -1,8 +1,9 @@
-import { type HttpClient } from '@/infra/gateways/protocols'
+import { HttpStatusCode, type HttpClient } from '@/data/protocols/http'
 import { RemoteAuthentication } from '@/domain/usecases'
 import { mock, type MockProxy } from 'jest-mock-extended'
 import { faker } from '@faker-js/faker'
 import { type Authentication } from '@/domain/usecases/protocols'
+import { InvalidCredentialsError } from '@/domain/errors'
 
 describe('RemoteAuthentication', () => {
   let httpClient: MockProxy<HttpClient>
@@ -19,6 +20,10 @@ describe('RemoteAuthentication', () => {
     }
   })
   beforeEach(() => {
+    httpClient.post.mockResolvedValue({
+      statusCode: HttpStatusCode.ok,
+      body: { accessToken: faker.number.int() }
+    })
     sut = new RemoteAuthentication(url, httpClient)
   })
 
@@ -29,5 +34,15 @@ describe('RemoteAuthentication', () => {
       url,
       data: credentials
     })
+  })
+
+  it('Should throw InvalidCredentialsError if HttpPostClient returns 401', async () => {
+    httpClient.post.mockResolvedValueOnce({
+      statusCode: HttpStatusCode.unauthorized
+    })
+
+    const promise = sut.auth(credentials)
+
+    await expect(promise).rejects.toThrow(new InvalidCredentialsError())
   })
 })
