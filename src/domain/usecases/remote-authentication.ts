@@ -5,7 +5,7 @@ import {
 } from '@/data/protocols/http'
 import { type AccountModel } from '../models'
 import { type Authentication } from './protocols'
-import { InvalidCredentialsError } from '../errors'
+import { InvalidCredentialsError, UnexpectedError } from '../errors'
 
 export class RemoteAuthentication implements Authentication {
   constructor(
@@ -21,7 +21,10 @@ export class RemoteAuthentication implements Authentication {
     console.log(res)
     if (res.statusCode === HttpStatusCode.unauthorized) {
       throw new InvalidCredentialsError()
+    } else if (res.statusCode !== HttpStatusCode.ok) {
+      throw new UnexpectedError()
     }
+
     return await Promise.resolve(res.body ?? { accessToken: '' })
   }
 }

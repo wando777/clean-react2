@@ -3,7 +3,7 @@ import { RemoteAuthentication } from '@/domain/usecases'
 import { mock, type MockProxy } from 'jest-mock-extended'
 import { faker } from '@faker-js/faker'
 import { type Authentication } from '@/domain/usecases/protocols'
-import { InvalidCredentialsError } from '@/domain/errors'
+import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors'
 
 describe('RemoteAuthentication', () => {
   let httpClient: MockProxy<HttpClient>
@@ -44,5 +44,15 @@ describe('RemoteAuthentication', () => {
     const promise = sut.auth(credentials)
 
     await expect(promise).rejects.toThrow(new InvalidCredentialsError())
+  })
+
+  it('Should throw UnexpectedError if HttpPostClient returns 400', async () => {
+    httpClient.post.mockResolvedValueOnce({
+      statusCode: HttpStatusCode.badRequest
+    })
+
+    const promise = sut.auth(credentials)
+
+    await expect(promise).rejects.toThrow(new UnexpectedError())
   })
 })
