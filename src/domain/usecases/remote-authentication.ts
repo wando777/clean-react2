@@ -25,6 +25,6 @@ export class RemoteAuthentication implements Authentication {
       throw new UnexpectedError()
     }
 
-    return await Promise.resolve(res.body ?? { accessToken: '' })
+    return res.body ?? { accessToken: '' }
   }
 }

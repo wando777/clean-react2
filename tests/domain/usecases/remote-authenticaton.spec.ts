@@ -10,6 +10,7 @@ describe('RemoteAuthentication', () => {
   let url: string
   let sut: RemoteAuthentication
   let credentials: Authentication.Input
+  let accessToken: string
 
   beforeAll(() => {
     httpClient = mock()
@@ -18,11 +19,12 @@ describe('RemoteAuthentication', () => {
       email: faker.internet.email(),
       password: faker.internet.password()
     }
+    accessToken = faker.number.int().toString()
   })
   beforeEach(() => {
     httpClient.post.mockResolvedValue({
       statusCode: HttpStatusCode.ok,
-      body: { accessToken: faker.number.int() }
+      body: { accessToken }
     })
     sut = new RemoteAuthentication(url, httpClient)
   })
@@ -54,5 +56,26 @@ describe('RemoteAuthentication', () => {
     const promise = sut.auth(credentials)
 
     await expect(promise).rejects.toThrow(new UnexpectedError())
+  })
+
+  it('Should throw UnexpectedError if HttpPostClient returns 404', async () => {
+    httpClient.post.mockResolvedValueOnce({
+      statusCode: HttpStatusCode.notFound
+    })
+    const promise = sut.auth(credentials)
+    await expect(promise).rejects.toThrow(new UnexpectedError())
+  })
+
+  it('Should throw UnexpectedError if HttpPostClient returns 500', async () => {
+    httpClient.post.mockResolvedValueOnce({
+      statusCode: HttpStatusCode.serverError
+    })
+    const promise = sut.auth(credentials)
+    await expect(promise).rejects.toThrow(new UnexpectedError())
+  })
+
+  it('Should return an AccountModel if HttpPosClient returns 200', async () => {
+    const accountToken = await sut.auth(credentials)
+    expect(accountToken).toEqual({ accessToken })
   })
 })
